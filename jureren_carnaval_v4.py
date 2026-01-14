@@ -673,14 +673,15 @@ else:
                 df_uitslag_leutigste = df_leutigste.groupby(["Vereniging", "Titel"])["Punten"].sum().reset_index()
                 df_uitslag_leutigste = df_uitslag_leutigste.sort_values(by="Punten", ascending=False).reset_index(drop=True)
                 df_uitslag_leutigste["Plaats"] = range(1, len(df_uitslag_leutigste) + 1)
+                df_uitslag_leutigste["Beoordelingscriterium"] = "Leutigste Deelnemer"
                 df_uitslag_leutigste["Categorie"] = "Leutigste Deelnemer"
                 
                 # beoordelingscriteria op 0 punten zetten voor leutigste deelnemer. Zo kunnen de dataframes bij elkaar gevoegd worden. (Zelfde kolommen)
                 for col in kolommen_criteria:
                     if col not in df_uitslag_leutigste.columns:
                         df_uitslag_leutigste[col] = 0
-                df_uitslag_leutigste.rename(columns={"Punten":"Totaal punten"})
-                df_uitslag_leutigste = df_uitslag_leutigste[kolomvolgorde]
+                df_uitslag_leutigste = df_uitslag_leutigste.rename(columns={"Punten":"Totaal punten"})
+                df_uitslag_leutigste = df_uitslag_leutigste[kolomvolgorde[:-1]]
                 df_rapport_leutigste = df_uitslag_leutigste.copy()
                 
                 df_rapport = pd.concat([df_rapport_categorien, df_rapport_carnavalesk, df_rapport_leutigste], ignore_index=True)
@@ -757,5 +758,6 @@ else:
         else:
             st.info("⏳ Wacht op alle juryleden, of vink 'forceren' aan om toch te berekenen.")
     
+
 
 
